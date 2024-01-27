@@ -14,25 +14,27 @@ public class Instance
     // https://pve.proxmox.com/pve-docs/api-viewer/index.html#/nodes
 
     internal readonly ClientInfo api;
-    internal readonly AuthParams auth;
+    internal readonly bool allowInsecureCertificates;
 
     public Instance(string url, AuthParams auth)
+        : this(url, $"PVEAPIToken={auth.GetApiToken()}")
     {
-        this.auth = auth;
-
+        allowInsecureCertificates = auth.AllowInsecureCertificates;
+    }
+    public Instance(string url, string pveToken)
+    {
         var handler = new HttpClientHandler();
         handler.ServerCertificateCustomValidationCallback ??= certificateValidation;
         api = new ClientInfo(url, handler);
 
-        api.SetAuthorization($"PVEAPIToken={auth.GetApiToken()}");
+        api.SetAuthorization(pveToken);
     }
     private bool certificateValidation(HttpRequestMessage message,
                                            System.Security.Cryptography.X509Certificates.X509Certificate2? certificate,
                                            System.Security.Cryptography.X509Certificates.X509Chain? chain,
                                            System.Net.Security.SslPolicyErrors policy)
     {
-        if (auth.AllowInsecureCertificates) return true;
-
+        if (allowInsecureCertificates) return true;
         return policy == System.Net.Security.SslPolicyErrors.None;
     }
 
