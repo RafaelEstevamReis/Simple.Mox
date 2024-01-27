@@ -76,6 +76,7 @@ public class Node
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
+    public async Task<VM> GetVM(InstanceVMs vm) => await GetVM(vm.vmid);
     public async Task<VM> GetVM(int vmid)
     {
         var r = await get<ResponseData<ResponseFolders[]>>($"qemu/{vmid}");
