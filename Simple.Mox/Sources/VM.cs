@@ -1,6 +1,7 @@
 ﻿namespace Simple.Mox.Sources;
 
 using Simple.Mox.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -52,6 +53,17 @@ public class VM
     public async Task<string?> ChangeState(VMStatus.StatusActions action)
     {
         var r = await post<ResponseData<string>>($"status/{action.ToString().ToLower()}", null);
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
+
+    public async Task<string> Migrate(string targetNode, bool liveMigration = false)
+    {
+        var r = await post<ResponseData<string>>($"migrate", new
+        {
+            target = targetNode,
+            online = liveMigration ? "1" : "0",
+        });
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
