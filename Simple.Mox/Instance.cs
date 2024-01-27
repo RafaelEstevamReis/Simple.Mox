@@ -77,6 +77,7 @@ public class Instance
                     Status = lxc.status,
                     Type = lxc.type,
                     Node = node.Node,
+                    ItemDetails = lxc,
                     NodeInstance = node,
                 });
             }
@@ -91,6 +92,7 @@ public class Instance
                     Status = vm.status,
                     Type = "qemu",
                     Node = node.Node,
+                    ItemDetails = vm,
                     NodeInstance = node,
                 });
             }

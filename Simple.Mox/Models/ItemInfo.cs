@@ -10,4 +10,5 @@ public record ItemInfo
     public string Status { get; set; }
     public string Type { get; set; }
     public InstanceNodes NodeInstance { get; set; }
+    public InstanceItem ItemDetails { get; internal set; }
 }
