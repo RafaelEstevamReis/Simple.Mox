@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class Node
 {
-    private static readonly Encoding ImageEncoding = Encoding.GetEncoding("iso-8859-1");
+    internal static readonly Encoding ImageEncoding = Encoding.GetEncoding("iso-8859-1");
     public Instance Instance { get; }
     public string NodeName { get; }
 
@@ -64,7 +64,7 @@ public class Node
     }
     public async Task<LXC> GetLXC(int vmid)
     {
-        var r = await get<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{NodeName}/lxc/{vmid}");
+        var r = await get<ResponseData<ResponseFolders[]>>($"lxc/{vmid}");
         r.EnsureSuccessStatusCode();
         return new LXC(this, vmid, r.Data.Data);
     }
@@ -77,7 +77,7 @@ public class Node
     }
     public async Task<VM> GetVM(int vmid)
     {
-        var r = await get<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{NodeName}/qemu/{vmid}");
+        var r = await get<ResponseData<ResponseFolders[]>>($"qemu/{vmid}");
         r.EnsureSuccessStatusCode();
         return new VM(this, vmid, r.Data.Data);
     }

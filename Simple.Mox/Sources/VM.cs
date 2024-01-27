@@ -1,5 +1,6 @@
 ﻿namespace Simple.Mox.Sources;
 
+using Simple.Mox.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,11 +11,11 @@ public class VM
 
     private string[] items;
 
-    internal VM(Node node, int vmid, Models.ResponseNames[] data)
+    internal VM(Node node, int vmid, ResponseFolders[] data)
     {
         Node = node;
         VMID = vmid;
-        items = data.Select(o => o.Name).ToArray();
+        items = data.Select(o => o.Subdir).ToArray();
     }
 
     private async Task<API.Response<T>> get<T>(string service)
@@ -26,6 +27,26 @@ public class VM
     {
         var api = Node.Instance.api;
         return await api.PostAsync<T>($"/api2/json/nodes/{Node.NodeName}/qemu/{VMID}/{service}", value);
+    }
+
+    public async Task<VMRRD[]?> GetStatistics(NodeRRD.TimeFrame timeFrame)
+    {
+        var r = await get<ResponseData<VMRRD[]>>($"rrddata?timeframe={timeFrame}");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
+    public async Task<byte[]> GetStatisticsImage(NodeRRD.TimeFrame timeFrame, VMRRD.DataSet dataset)
+    {
+        var r = await get<ResponseData<VMRRD_StringImage>>($"rrd?timeframe={timeFrame}&ds={dataset}");
+        r.EnsureSuccessStatusCode();
+        return Node.ImageEncoding.GetBytes(r.Data.Data.Image);
+    }
+
+    public async Task<VMStatus?> GetStatus()
+    {
+        var r = await get<ResponseData<VMStatus>>("status/current");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
     }
 
 }
