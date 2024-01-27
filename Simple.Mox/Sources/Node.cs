@@ -49,6 +49,12 @@ public class Node
         return r.Data.Data;
     }
 
+    public async Task<NodeAppliance[]?> GetAppliances()
+    {
+        var r = await get<ResponseData<NodeAppliance[]>>("aplinfo");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
     public async Task<NodeNetStat[]?> GetNetstat()
     {
         var r = await get<ResponseData<NodeNetStat[]>>("netstat");
