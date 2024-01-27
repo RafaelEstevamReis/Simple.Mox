@@ -48,6 +48,12 @@ public class Node
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
+    public async Task<NodeUpdate[]?> GetUpdates()
+    {
+        var r = await get<ResponseData<NodeUpdate[]>>("apt/update");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
 
     public async Task<NodeAppliance[]?> GetAppliances()
     {
