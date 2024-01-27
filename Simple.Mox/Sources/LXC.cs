@@ -30,39 +30,39 @@ public class LXC
         return await api.PostAsync<T>($"/api2/json/nodes/{Node.NodeName}/lxc/{VMID}/{service}", value);
     }
 
-    public async Task<LXCRRD[]?> GetStatistics(NodeRRD.TimeFrame timeFrame)
+    public async Task<LXCRRD[]?> GetStatisticsAsync(NodeRRD.TimeFrame timeFrame)
     {
         var r = await get<ResponseData<LXCRRD[]>>($"rrddata?timeframe={timeFrame}");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
-    public async Task<byte[]> GetStatisticsImage(NodeRRD.TimeFrame timeFrame, LXCRRD.DataSet dataset)
+    public async Task<byte[]> GetStatisticsImageAsync(NodeRRD.TimeFrame timeFrame, LXCRRD.DataSet dataset)
     {
         var r = await get<ResponseData<LXCRRD_StringImage>>($"rrd?timeframe={timeFrame}&ds={dataset}");
         r.EnsureSuccessStatusCode();
         return Node.ImageEncoding.GetBytes(r.Data.Data.Image);
     }
 
-    public async Task<ResponseData<Dictionary<string, string>>> GetConfig(bool pending = false)
+    public async Task<ResponseData<Dictionary<string, string>>> GetConfigAsync(bool pending = false)
     {
         var r = await get<ResponseData<Dictionary<string, string>>>($"config?current={(pending ? "0" : "1")}"); // INVERTED!!!
         r.EnsureSuccessStatusCode();
         return r.Data;
     }
-    public async Task<LXCStatus?> GetStatus()
+    public async Task<LXCStatus?> GetStatusAsync()
     {
         var r = await get<ResponseData<LXCStatus>>("status/current");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
-    public async Task<string?> ChangeState(LXCStatus.StatusActions action)
+    public async Task<string?> ChangeStateAsync(LXCStatus.StatusActions action)
     {
         var r = await post<ResponseData<string>>($"status/{action.ToString().ToLower()}", null);
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
 
-    public async Task<string> Migrate(string targetNode, bool liveMigration = false)
+    public async Task<string> MigrateAsync(string targetNode, bool liveMigration = false)
     {
         var r = await post<ResponseData<string>>($"migrate", new
         {

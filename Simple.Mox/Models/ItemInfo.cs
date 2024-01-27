@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 public record ItemsInfo
 {
-    public ItemInfo? this[int vmid] => Items.FirstOrDefault(o => o.VMID == vmid);
-    public ItemInfo? this[string name] => Items.FirstOrDefault(o => o.Name == name);
+    public ItemInfo this[int vmid] => Items.FirstOrDefault(o => o.VMID == vmid) ?? throw new ArgumentException("ID not found");
+    public ItemInfo this[string name] => Items.FirstOrDefault(o => o.Name == name) ?? throw new ArgumentException("ID not found");
+    public ItemInfo this[InstanceItem item] => Items.FirstOrDefault(o => o.VMID == item.vmid) ?? throw new ArgumentException("ID not found");
 
     public ItemInfo[] Items { get; set; } = System.Array.Empty<ItemInfo>();
 }
@@ -27,12 +28,12 @@ public record ItemInfo
     public async Task<VM> AsVMAsync()
     {
         if (Type != "qemu") throw new InvalidOperationException("Is not a VM");
-        return await NodeInstance.GetVM(VMID);
+        return await NodeInstance.GetVMAsync(VMID);
     }
     public async Task<LXC> AsLXCAsync()
     {
         if (Type == "qemu") throw new InvalidOperationException("Is not a LXC");
-        return await NodeInstance.GetLXC(VMID);
+        return await NodeInstance.GetLXCAsync(VMID);
     }
 
 }

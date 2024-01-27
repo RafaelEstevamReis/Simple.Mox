@@ -29,72 +29,72 @@ public class Node
         return await Instance.api.PostAsync<T>($"/api2/json/nodes/{NodeName}/{service}", value);
     }
 
-    public async Task<NodeRRD[]?> GetStatistics(NodeRRD.TimeFrame timeFrame)
+    public async Task<NodeRRD[]?> GetStatisticsAsync(NodeRRD.TimeFrame timeFrame)
     {
         var r = await get<ResponseData<NodeRRD[]>>($"rrddata?timeframe={timeFrame}");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
-    public async Task<byte[]> GetStatisticsImage(NodeRRD.TimeFrame timeFrame, NodeRRD.DataSet dataset)
+    public async Task<byte[]> GetStatisticsImageAsync(NodeRRD.TimeFrame timeFrame, NodeRRD.DataSet dataset)
     {
         var r = await get<ResponseData<NodeRRD_StringImage>>($"rrd?timeframe={timeFrame}&ds={dataset}");
         r.EnsureSuccessStatusCode();
         return ImageEncoding.GetBytes(r.Data.Data.Image);
     }
 
-    public async Task<NodeStatus?> GetStatus()
+    public async Task<NodeStatus?> GetStatusAsync()
     {
         var r = await get<ResponseData<NodeStatus>>("status");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
 
-    public async Task<string> Report()
+    public async Task<string> ReportAsync()
     {
         var r = await get<ResponseData<string>>("report");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
 
-    public async Task<InstanceLXCs[]?> GetLXCs()
+    public async Task<InstanceLXCs[]?> GetLXCsAsync()
     {
         var r = await get<ResponseData<InstanceLXCs[]>>("lxc");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
-    public async Task<LXC> GetLXC(InstanceLXCs lxc) => await GetLXC(lxc.vmid);
-    public async Task<LXC> GetLXC(int vmid)
+    public async Task<LXC> GetLXCAsync(InstanceLXCs lxc) => await GetLXCAsync(lxc.vmid);
+    public async Task<LXC> GetLXCAsync(int vmid)
     {
         var r = await get<ResponseData<ResponseFolders[]>>($"lxc/{vmid}");
         r.EnsureSuccessStatusCode();
         return new LXC(this, vmid, r.Data.Data);
     }
 
-    public async Task<InstanceVMs[]?> GetVMs()
+    public async Task<InstanceVMs[]?> GetVMsAsync()
     {
         var r = await get<ResponseData<InstanceVMs[]>>("qemu");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
-    public async Task<VM> GetVM(InstanceVMs vm) => await GetVM(vm.vmid);
-    public async Task<VM> GetVM(int vmid)
+    public async Task<VM> GetVMAsync(InstanceVMs vm) => await GetVMAsync(vm.vmid);
+    public async Task<VM> GetVMAsync(int vmid)
     {
         var r = await get<ResponseData<ResponseFolders[]>>($"qemu/{vmid}");
         r.EnsureSuccessStatusCode();
         return new VM(this, vmid, r.Data.Data);
     }
 
-    public async Task WakeOnLan()
+    public async Task WakeOnLanAsync()
     {
         var r = await post<string>("wakeonlan", null);
         r.EnsureSuccessStatusCode();
     }
-    public async Task RebootNode()
+    public async Task RebootNodeAsync()
     {
         var r = await post<string>("status", new { command = "reboot" });
         r.EnsureSuccessStatusCode();
     }
-    public async Task ShutdownNode()
+    public async Task ShutdownNodeAsync()
     {
         var r = await post<string>("status", new { command = "shutdown" });
         r.EnsureSuccessStatusCode();

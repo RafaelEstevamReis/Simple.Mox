@@ -37,7 +37,7 @@ public class Instance
         return policy == System.Net.Security.SslPolicyErrors.None;
     }
 
-    public async Task<InstanceInfo> GetInfo()
+    public async Task<InstanceInfo> GetInfoAsync()
     {
         var rBase = await api.GetAsync<ResponseData<ResponseFolders[]>>("/api2/json/");
         rBase.EnsureSuccessStatusCode();
@@ -57,7 +57,7 @@ public class Instance
             AccessSections = (await rAccess).Data.Data?.Select(o => o.Subdir).ToArray(),
         };
     }
-    public async Task<ItemsInfo> GetItems()
+    public async Task<ItemsInfo> GetItemsAsync()
     {
         List<ItemInfo> lst = new List<ItemInfo>();
         var rNodes = await api.GetAsync<ResponseData<InstanceNodes[]>>("/api2/json/nodes");
@@ -66,8 +66,8 @@ public class Instance
 
         foreach (var nodeInfo in nodes)
         {
-            var nodeInstance = await GetNode(nodeInfo);
-            var lxcs = await nodeInstance.GetLXCs();
+            var nodeInstance = await GetNodeAsync(nodeInfo);
+            var lxcs = await nodeInstance.GetLXCsAsync();
             foreach (var lxc in lxcs)
             {
                 lst.Add(new ItemInfo()
@@ -83,7 +83,7 @@ public class Instance
                 });
             }
 
-            var vms = await nodeInstance.GetVMs();
+            var vms = await nodeInstance.GetVMsAsync();
             foreach (var vm in vms)
             {
                 lst.Add(new ItemInfo()
@@ -102,8 +102,8 @@ public class Instance
         return new ItemsInfo { Items = lst.ToArray() };
     }
 
-    public async Task<Node> GetNode(InstanceNodes node) => await GetNode(node.Node);
-    public async Task<Node> GetNode(string nodeName)
+    public async Task<Node> GetNodeAsync(InstanceNodes node) => await GetNodeAsync(node.Node);
+    public async Task<Node> GetNodeAsync(string nodeName)
     {
         var r = await api.GetAsync<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{nodeName}");
         r.EnsureSuccessStatusCode();
