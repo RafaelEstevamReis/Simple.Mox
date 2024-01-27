@@ -62,6 +62,7 @@ public class Node
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
+    public async Task<LXC> GetLXC(InstanceLXCs lxc) => await GetLXC(lxc.vmid);
     public async Task<LXC> GetLXC(int vmid)
     {
         var r = await get<ResponseData<ResponseFolders[]>>($"lxc/{vmid}");

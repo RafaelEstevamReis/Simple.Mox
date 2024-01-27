@@ -4,7 +4,7 @@ using System;
 
 public record InstanceLXCs
 {
-    public string vmid { get; set; }
+    public int vmid { get; set; }
     public int diskread { get; set; }
     public long mem { get; set; }
     public long disk { get; set; }
