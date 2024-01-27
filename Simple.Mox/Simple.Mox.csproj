@@ -1,10 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+		<LangVersion>10.0</LangVersion>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+
+		<Version>0.6.0.1</Version>
+		<Authors>RafaelEstevam.Net</Authors>
+		<Company>RafaelEstevam.Net</Company>
+		<Product>Simple C# Proxmox API</Product>
+		<Description>A simple C# ProxMox API implementation</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/RafaelEstevamReis/Simple.Mox</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/RafaelEstevamReis/Simple.Mox</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Simple API client</PackageTags>
+		<PackageReleaseNotes>See examples and documentation on the GitHub page https://github.com/RafaelEstevamReis/Simple.Mox</PackageReleaseNotes>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Simple.API" Version="1.7.1.3" />
