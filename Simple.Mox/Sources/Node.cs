@@ -49,7 +49,7 @@ public class Node
         return r.Data.Data;
     }
 
-    public async Task<string> ReportAsync()
+    public async Task<string> GenerateReportAsync()
     {
         var r = await get<ResponseData<string>>("report");
         r.EnsureSuccessStatusCode();
