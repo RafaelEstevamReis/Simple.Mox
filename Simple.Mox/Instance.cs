@@ -16,8 +16,7 @@ public class Instance
     internal readonly ClientInfo api;
     internal readonly bool allowInsecureCertificates;
 
-    public Instance(string url, AuthParams auth)
-        : this(url, $"PVEAPIToken={auth.GetApiToken()}")
+    public Instance(string url, AuthParams auth) : this(url, $"PVEAPIToken={auth.GetApiToken()}")
     {
         allowInsecureCertificates = auth.AllowInsecureCertificates;
     }
@@ -58,7 +57,7 @@ public class Instance
             AccessSections = (await rAccess).Data.Data?.Select(o => o.Subdir).ToArray(),
         };
     }
-    public async Task<ItemInfo[]> GetItems()
+    public async Task<ItemsInfo> GetItems()
     {
         List<ItemInfo> lst = new List<ItemInfo>();
         var rNodes = await api.GetAsync<ResponseData<InstanceNodes[]>>("/api2/json/nodes");
@@ -99,7 +98,7 @@ public class Instance
                 });
             }
         }
-        return lst.ToArray();
+        return new ItemsInfo { Items = lst.ToArray() };
     }
 
     public async Task<Node> GetNode(InstanceNodes node) => await GetNode(node.Node);
