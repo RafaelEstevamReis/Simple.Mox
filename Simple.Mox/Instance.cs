@@ -1,14 +1,17 @@
-﻿using Simple.API;
+﻿namespace Simple.Mox;
+
+using Simple.API;
 using Simple.Mox.Models;
 using Simple.Mox.Sources;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Simple.Mox;
-
 public class Instance
 {
+    // Reference:
+    // https://pve.proxmox.com/pve-docs/api-viewer/index.html#/nodes
+
     internal readonly ClientInfo api;
     internal readonly AuthParams auth;
 
