@@ -64,22 +64,22 @@ public class Instance
         rNodes.EnsureSuccessStatusCode();
         var nodes = rNodes.Data.Data;
 
-        foreach (var node in nodes)
+        foreach (var nodeInfo in nodes)
         {
-            var nodeInstance = await GetNode(node);
-
+            var nodeInstance = await GetNode(nodeInfo);
             var lxcs = await nodeInstance.GetLXCs();
             foreach (var lxc in lxcs)
             {
                 lst.Add(new ItemInfo()
                 {
-                    VMId = lxc.vmid,
+                    VMID = lxc.vmid,
                     Name = lxc.name,
                     Status = lxc.status,
                     Type = lxc.type,
-                    Node = node.Node,
+                    Node = nodeInfo.Node,
                     ItemDetails = lxc,
-                    NodeInstance = node,
+                    NodeInfo = nodeInfo,
+                    NodeInstance = nodeInstance,
                 });
             }
 
@@ -88,13 +88,14 @@ public class Instance
             {
                 lst.Add(new ItemInfo()
                 {
-                    VMId = vm.vmid,
+                    VMID = vm.vmid,
                     Name = vm.name,
                     Status = vm.status,
                     Type = "qemu",
-                    Node = node.Node,
+                    Node = nodeInfo.Node,
                     ItemDetails = vm,
-                    NodeInstance = node,
+                    NodeInfo = nodeInfo,
+                    NodeInstance = nodeInstance,
                 });
             }
         }
