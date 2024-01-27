@@ -56,6 +56,32 @@ public class Node
         return r.Data.Data;
     }
 
+    public async Task<InstanceLXCs[]?> GetLXCs()
+    {
+        var r = await get<ResponseData<InstanceLXCs[]>>("lxc");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
+    public async Task<LXC> GetLXC(int vmid)
+    {
+        var r = await get<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{NodeName}/lxc/{vmid}");
+        r.EnsureSuccessStatusCode();
+        return new LXC(this, vmid, r.Data.Data);
+    }
+
+    public async Task<InstanceVMs[]?> GetVMs()
+    {
+        var r = await get<ResponseData<InstanceVMs[]>>("qemu");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
+    public async Task<VM> GetVM(int vmid)
+    {
+        var r = await get<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{NodeName}/qemu/{vmid}");
+        r.EnsureSuccessStatusCode();
+        return new VM(this, vmid, r.Data.Data);
+    }
+
     public async Task WakeOnLan()
     {
         var r = await post<string>("wakeonlan", null);
