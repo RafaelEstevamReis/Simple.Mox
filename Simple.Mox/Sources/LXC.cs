@@ -49,4 +49,11 @@ public class LXC
         return r.Data.Data;
     }
 
+    public async Task<string?> ChangeState(LXCStatus.StatusActions action)
+    {
+        var r = await post<ResponseData<string>>($"status/{action.ToString().ToLower()}", null);
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
+
 }

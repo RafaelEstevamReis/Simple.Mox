@@ -3,6 +3,16 @@
 using System;
 public record LXCStatus
 {
+    public enum StatusActions
+    {
+        Reboot,
+        Resume,
+        Shutdown,
+        Start,
+        Stop,
+        Suspend,
+    }
+
     public Ha ha { get; set; }
     public long maxmem { get; set; }
     public int swap { get; set; }

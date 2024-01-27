@@ -5,6 +5,16 @@ using System.Collections.Generic;
 
 public record VMStatus
 {
+    public enum StatusActions
+    {
+        Reboot,
+        Resume,
+        Shutdown,
+        Start,
+        Stop,
+        Suspend,
+    }
+
     public long maxmem { get; set; }
     public Ha ha { get; set; }
     public int shares { get; set; }

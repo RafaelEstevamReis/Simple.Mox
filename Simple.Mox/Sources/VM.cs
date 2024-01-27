@@ -49,4 +49,10 @@ public class VM
         return r.Data.Data;
     }
 
+    public async Task<string?> ChangeState(VMStatus.StatusActions action)
+    {
+        var r = await post<ResponseData<string>>($"status/{action.ToString().ToLower()}", null);
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
 }
