@@ -43,6 +43,12 @@ public class VM
         return Node.ImageEncoding.GetBytes(r.Data.Data.Image);
     }
 
+    public async Task<ResponseData<Dictionary<string, string>>> GetConfig(bool pending = false)
+    {
+        var r = await get<ResponseData<Dictionary<string, string>>>($"config?current={(pending ? "0" : "1")}"); // INVERTED!!!
+        r.EnsureSuccessStatusCode();
+        return r.Data;
+    }
     public async Task<VMStatus?> GetStatus()
     {
         var r = await get<ResponseData<VMStatus>>("status/current");
