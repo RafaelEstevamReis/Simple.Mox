@@ -25,6 +25,8 @@ public record NodeStatus
         public long free { get; set; }
         public long used { get; set; }
         public long total { get; set; }
+
+        public float percent => (100f * used) / total;
     }
 
     public record Rootfs
@@ -33,6 +35,8 @@ public record NodeStatus
         public long free { get; set; }
         public long total { get; set; }
         public long used { get; set; }
+
+        public float percent => (100f * used) / total;
     }
 
     public record BootInfo
