@@ -80,6 +80,7 @@ public class Instance
                     ItemDetails = lxc,
                     NodeInfo = nodeInfo,
                     NodeInstance = nodeInstance,
+                    IsVM = false,
                 });
             }
 
@@ -96,6 +97,7 @@ public class Instance
                     ItemDetails = vm,
                     NodeInfo = nodeInfo,
                     NodeInstance = nodeInstance,
+                    IsVM = true,
                 });
             }
         }

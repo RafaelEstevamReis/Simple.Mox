@@ -24,6 +24,10 @@ public record ItemInfo
     public InstanceNodes NodeInfo { get; set; }
     public InstanceItem ItemDetails { get; internal set; }
     public Node NodeInstance { get; set; }
+    public bool IsVM { get; set; }
+    public bool IsLXC => !IsVM;
+    public bool IsRunning => Status == "running";
+    public bool IsStopped => Status == "stopped";
 
     public async Task<VM> AsVMAsync()
     {

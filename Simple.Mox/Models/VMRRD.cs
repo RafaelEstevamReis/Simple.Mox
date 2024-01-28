@@ -31,7 +31,7 @@ public record VMRRD
     public long maxdisk { get; set; }
     public float netin { get; set; }
     [JsonConverter(typeof(UnixDateTimeConverter))]
-    public int time { get; set; }
+    public DateTime time { get; set; }
 }
 public record VMRRD_StringImage
 {
