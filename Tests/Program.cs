@@ -1,13 +1,21 @@
 ﻿using Simple.Mox;
 
+// Either Manually get a Token
 //Instance c = new Instance("https://proxmox.local:8006/", "PVEAPIToken=a@b!a=123");
-Instance c = new Instance("https://proxmox.local:8006/", new AuthParams
-{
-    User = "username",
-    Realm = "pam", // default
-    TokenName = "monitoring",
-    TokenSecret = "aaaaaaaaa-bbb-cccc-dddd-ef0123456789",
-});
+
+// Assign fields
+//var auth = new AuthParams
+//{
+//    User = "username",
+//    Realm = "pam", // default
+//    TokenName = "monitoring",
+//    TokenSecret = "aaaaaaaaa-bbb-cccc-dddd-ef0123456789",
+//};
+//auth.Save("auth.cfg");
+
+// Load saved config
+Instance c = new Instance("https://proxmox.local:8006/", AuthParams.Load("auth.cfg"));
+
 
 // Get Proxmox instance info
 var info = await c.GetInfoAsync();
