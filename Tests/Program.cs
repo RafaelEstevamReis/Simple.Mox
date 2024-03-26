@@ -1,4 +1,5 @@
 ﻿using Simple.Mox;
+using System;
 
 // Either Manually get a Token
 //Instance c = new Instance("https://proxmox.local:8006/", "PVEAPIToken=a@b!a=123");
@@ -14,14 +15,25 @@
 //auth.Save("auth.cfg");
 
 // Load saved config
-Instance c = new Instance("https://proxmox.local:8006/", AuthParams.Load("auth.cfg"));
+//Instance c = new Instance("https://proxmox.local:8006/", AuthParams.Load("auth.cfg"));
 
+Instance c = new Instance("https://proxmox.local:8006", new AuthParams()
+{
+    User = "root",
+    TokenName = "api-test",
+    TokenSecret = "aaaaaaaaa-bbb-cccc-dddd-ef0123456789",
+    AllowInsecureCertificates = true,
+});
 
 // Get Proxmox instance info
 var info = await c.GetInfoAsync();
 var firstNodeInfo = info.Nodes[0];
 // get node by info, index or name
 var node = await c.GetNodeAsync(firstNodeInfo); // await c.GetNodeAsync("pve");
+var apt = await node.GetUpdates();
+var appliances = await node.GetAppliances();
+var stat = await node.GetNetstat();
+
 // Node info
 var nodeStatus = await node.GetStatusAsync();
 var nodeReport = await node.GenerateReportAsync();
@@ -56,3 +68,5 @@ var lxc_stats = await lxc100.GetStatisticsAsync(Simple.Mox.Models.NodeRRD.TimeFr
 var lxc_bytes = await lxc100.GetStatisticsImageAsync(Simple.Mox.Models.NodeRRD.TimeFrame.day, Simple.Mox.Models.LXCRRD.DataSet.cpu);
 System.IO.File.WriteAllBytes("lxc100.png", lxc_bytes);
 
+node = node;
+node = node;
