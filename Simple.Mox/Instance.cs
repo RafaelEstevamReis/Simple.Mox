@@ -45,7 +45,7 @@ public class Instance
         var rVersion = api.GetAsync<ResponseData<InstanceVersion>>("/api2/json/version");
         var rCluster = api.GetAsync<ResponseData<ResponseNames[]>>("/api2/json/cluster");
         var rNodes = api.GetAsync<ResponseData<InstanceNodes[]>>("/api2/json/nodes");
-        //var r4 = await api.GetAsync<string>("/api2/json/storage");
+        var rStorage = api.GetAsync<ResponseData<ResponseStorage[]>>("/api2/json/storage");
         var rAccess = api.GetAsync<ResponseData<ResponseFolders[]>>("/api2/json/access");
         //var r6 = await api.GetAsync<string>("/api2/json/pools");
 
@@ -54,6 +54,7 @@ public class Instance
             Version = (await rVersion).Data.Data,
             Nodes = (await rNodes).Data.Data,
             ClusterSections = (await rCluster).Data.Data?.Select(o => o.Name).ToArray(),
+            Storage = (await rStorage).Data.Data,
             AccessSections = (await rAccess).Data.Data?.Select(o => o.Subdir).ToArray(),
         };
     }
@@ -64,11 +65,11 @@ public class Instance
         rNodes.EnsureSuccessStatusCode();
         var nodes = rNodes.Data.Data;
 
-        foreach (var nodeInfo in nodes)
+        foreach (var nodeInfo in nodes ?? [])
         {
             var nodeInstance = await GetNodeAsync(nodeInfo);
             var lxcs = await nodeInstance.GetLXCsAsync();
-            foreach (var lxc in lxcs)
+            foreach (var lxc in lxcs ?? [])
             {
                 lst.Add(new ItemInfo()
                 {
@@ -85,7 +86,7 @@ public class Instance
             }
 
             var vms = await nodeInstance.GetVMsAsync();
-            foreach (var vm in vms)
+            foreach (var vm in vms ?? [])
             {
                 lst.Add(new ItemInfo()
                 {

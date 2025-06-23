@@ -14,3 +14,13 @@ public record ResponseNames
 {
     public string Name { get; set; }
 }
+public class ResponseStorage
+{
+    public string storage { get; set; }
+    public string thinpool { get; set; }
+    public string type { get; set; }
+    public string vgname { get; set; }
+    public string content { get; set; }
+    public string digest { get; set; }
+    public string path { get; set; }
+}
