@@ -1,6 +1,7 @@
 ﻿namespace Simple.Mox.Sources;
 
 using Simple.Mox.Models;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ public class Node
 
     private string[] items;
 
-    internal Node(Instance instance, string nodeName, Models.ResponseNames[] data)
+    internal Node(Instance instance, string nodeName, ResponseNames[] data)
     {
         Instance = instance;
         NodeName = nodeName;
@@ -27,6 +28,21 @@ public class Node
     private async Task<API.Response<T>> post<T>(string service, object? value)
     {
         return await Instance.api.PostAsync<T>($"/api2/json/nodes/{NodeName}/{service}", value);
+    }
+
+    public async Task<string[]> GetJournalAsync(int lastEntries)
+    {
+        var r = await get<ResponseData<string[]>>($"journal?lastentries={lastEntries}");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data ?? [];
+    }
+    public async Task<string[]> GetJournalAsync(DateTime start, DateTime end)
+    {
+        var uStart = start.GetEpoch();
+        var uEnd = end.GetEpoch();
+        var r = await get<ResponseData<string[]>>($"journal?since={uStart}&until={uEnd}");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data ?? [];
     }
 
     public async Task<NodeRRD[]?> GetStatisticsAsync(NodeRRD.TimeFrame timeFrame)
@@ -70,6 +86,19 @@ public class Node
     public async Task<string> GenerateReportAsync()
     {
         var r = await get<ResponseData<string>>("report");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data;
+    }
+
+    public async Task<NodeDiskList[]> GetDisksListAsync()
+    {
+        var r = await get<ResponseData<NodeDiskList[]>>("disks/list");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data = [];
+    }
+    public async Task<NodeDiskSmart> GetDisksSmartAsync(string disk)
+    {
+        var r = await get<ResponseData<NodeDiskSmart>>($"disks/smart?disk={disk}");
         r.EnsureSuccessStatusCode();
         return r.Data.Data;
     }
