@@ -29,7 +29,14 @@ Instance c = new Instance("https://proxmox.local:8006", new AuthParams()
 var info = await c.GetInfoAsync();
 var firstNodeInfo = info.Nodes[0];
 // get node by info, index or name
-var node = await c.GetNodeAsync(firstNodeInfo); // await c.GetNodeAsync("pve");
+var node = c.GetNode(firstNodeInfo); // c.GetNode("pve");
+
+await node.GetDisksListAsync();
+await node.GetDisksSmartAsync("/dev/sda");
+// Journal/Logs
+var logs = await node.GetJournalAsync(lastEntries: 30);
+var logsData = await node.GetJournalAsync(start: DateTime.Now.AddHours(-1), DateTime.Now);
+
 var apt = await node.GetUpdates();
 var appliances = await node.GetAppliances();
 var stat = await node.GetNetstat();
