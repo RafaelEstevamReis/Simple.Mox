@@ -38,7 +38,7 @@ Get Proxmox instance info
 var info = await c.GetInfoAsync();
 var firstNodeInfo = info.Nodes[0];
 // get node by info, index or name
-var node = await c.GetNodeAsync(firstNodeInfo); // await c.GetNodeAsync("pve");
+var node = c.GetNode(firstNodeInfo); // or c.GetNode("pve");
 ~~~
 
 Get Node info
