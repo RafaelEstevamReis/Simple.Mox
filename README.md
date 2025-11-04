@@ -1,6 +1,6 @@
 # Simple.Mox
 [![.NET](https://github.com/RafaelEstevamReis/Simple.Mox/actions/workflows/dotnet.yml/badge.svg)](https://github.com/RafaelEstevamReis/Simple.Mox)
-[![NuGet](https://buildstats.info/nuget/Simple.Mox)](https://www.nuget.org/packages/Simple.Mox)
+[![NuGet](https://img.shields.io/nuget/v/Simple.Mox)](https://www.nuget.org/packages/Simple.Mox)
 
 A simple [Proxmox](https://pve.proxmox.com/wiki/Main_Page) C# API
 
