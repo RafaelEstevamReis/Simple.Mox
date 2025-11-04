@@ -12,13 +12,10 @@ public class Node
     public Instance Instance { get; }
     public string NodeName { get; }
 
-    private string[] items;
-
-    internal Node(Instance instance, string nodeName, ResponseNames[] data)
+    internal Node(Instance instance, string nodeName)
     {
         Instance = instance;
         NodeName = nodeName;
-        items = data.Select(o => o.Name).ToArray();
     }
 
     private async Task<API.Response<T>> get<T>(string service)

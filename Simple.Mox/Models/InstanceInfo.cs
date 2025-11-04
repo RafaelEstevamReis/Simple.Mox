@@ -5,10 +5,10 @@ using System;
 public record InstanceInfo
 {
     public InstanceVersion? Version { get; set; }
-    public InstanceNodes[]? Nodes { get; set; }
+    public InstanceNodes[] Nodes { get; set; } = [];
     public string[]? ClusterSections { get; set; }
     public string[]? AccessSections { get; set; }
-    public ResponseStorage[]? Storage { get; set; }
+    public ResponseStorage[] Storage { get; set; } = [];
 }
 public record InstanceVersion
 {

@@ -3,6 +3,7 @@
 using Simple.API;
 using Simple.Mox.Models;
 using Simple.Mox.Sources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -52,9 +53,9 @@ public class Instance
         return new InstanceInfo()
         {
             Version = (await rVersion).Data.Data,
-            Nodes = (await rNodes).Data.Data,
+            Nodes = (await rNodes).Data.Data ?? [],
             ClusterSections = (await rCluster).Data.Data?.Select(o => o.Name).ToArray(),
-            Storage = (await rStorage).Data.Data,
+            Storage = (await rStorage).Data.Data ?? [],
             AccessSections = (await rAccess).Data.Data?.Select(o => o.Subdir).ToArray(),
         };
     }
@@ -67,7 +68,7 @@ public class Instance
 
         foreach (var nodeInfo in nodes)
         {
-            var nodeInstance = new Node(this, nodeInfo.Node, []);
+            var nodeInstance = new Node(this, nodeInfo.Node);
             var lxcs = await nodeInstance.GetLXCsAsync();
             foreach (var lxc in lxcs)
             {
@@ -117,7 +118,7 @@ public class Instance
 
         foreach (var nodeInfo in nodes ?? [])
         {
-            var nodeInstance = new Node(this, nodeInfo.Node, []);
+            var nodeInstance = new Node(this, nodeInfo.Node);
             var lxcs = await nodeInstance.GetLXCsBaseAsync();
             foreach (var lxc in lxcs ?? [])
             {
@@ -149,12 +150,15 @@ public class Instance
         return lst.ToArray();
     }
 
-    public async Task<Node> GetNodeAsync(InstanceNodes node) => await GetNodeAsync(node.Node);
-    public async Task<Node> GetNodeAsync(string nodeName)
-    {
-        var r = await api.GetAsync<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{nodeName}");
-        r.EnsureSuccessStatusCode();
-        return new Node(this, nodeName, r.Data.Data ?? []);
-    }
+    [Obsolete("Use GetNode instead")]
+    public Task<Node> GetNodeAsync(InstanceNodes node) => Task.FromResult(new Node(this, node.Node));
+    public Node GetNode(InstanceNodes node) => new(this, node.Node);
+
+    //public async Task<Node> GetNodeAsync(string nodeName)
+    //{
+    //    var r = await api.GetAsync<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{nodeName}");
+    //    r.EnsureSuccessStatusCode();
+    //    return new Node(this, nodeName, r.Data.Data ?? []);
+    //}
 
 }
