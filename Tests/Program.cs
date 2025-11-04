@@ -49,17 +49,17 @@ var pngBytes = await node.GetStatisticsImageAsync(Simple.Mox.Models.NodeRRD.Time
 
 // Get node LXC
 var nodeAllLxcs = await node.GetLXCsAsync();
-var lxc100 = await node.GetLXCAsync(100);
+var lxc100 = node.GetLXC(100);
 // Get node VMs
 var nodeAllVMs = await node.GetVMsAsync();
-var vm300 = await node.GetVMAsync(300);
+var vm300 = node.GetVM(300);
 
 // Enumerate all VMs e LXCs
 var items = await c.GetItemsAsync();
 // get VM 123
-var vm123 = await items[123].AsVMAsync();
+var vm123 = items[123].AsVM();
 // get LXC 123
-var ct321 = await items[321].AsVMAsync();
+var ct321 = items[321].AsVM();
 
 // Get VM information
 var vm_status = await vm300.GetStatusAsync();
