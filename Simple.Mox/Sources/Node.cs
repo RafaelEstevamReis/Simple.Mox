@@ -103,32 +103,33 @@ public class Node
         return r.Data.Data;
     }
 
-    public async Task<InstanceLXCs[]?> GetLXCsAsync()
+    public async Task<InstanceLXCs[]> GetLXCsAsync()
     {
         var r = await get<ResponseData<InstanceLXCs[]>>("lxc");
         r.EnsureSuccessStatusCode();
-        return r.Data.Data;
+        return r.Data.Data ?? [];
     }
+
     public async Task<LXC> GetLXCAsync(InstanceLXCs lxc) => await GetLXCAsync(lxc.vmid);
     public async Task<LXC> GetLXCAsync(int vmid)
     {
         var r = await get<ResponseData<ResponseFolders[]>>($"lxc/{vmid}");
         r.EnsureSuccessStatusCode();
-        return new LXC(this, vmid, r.Data.Data);
+        return new LXC(this, vmid, r.Data.Data ?? []);
     }
 
-    public async Task<InstanceVMs[]?> GetVMsAsync()
+    public async Task<InstanceVMs[]> GetVMsAsync()
     {
         var r = await get<ResponseData<InstanceVMs[]>>("qemu");
         r.EnsureSuccessStatusCode();
-        return r.Data.Data;
+        return r.Data.Data ?? [];
     }
     public async Task<VM> GetVMAsync(InstanceVMs vm) => await GetVMAsync(vm.vmid);
     public async Task<VM> GetVMAsync(int vmid)
     {
         var r = await get<ResponseData<ResponseFolders[]>>($"qemu/{vmid}");
         r.EnsureSuccessStatusCode();
-        return new VM(this, vmid, r.Data.Data);
+        return new VM(this, vmid, r.Data.Data ?? []);
     }
 
     public async Task WakeOnLanAsync()

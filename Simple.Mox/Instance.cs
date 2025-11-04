@@ -63,13 +63,13 @@ public class Instance
         List<ItemInfo> lst = new List<ItemInfo>();
         var rNodes = await api.GetAsync<ResponseData<InstanceNodes[]>>("/api2/json/nodes");
         rNodes.EnsureSuccessStatusCode();
-        var nodes = rNodes.Data.Data;
+        var nodes = rNodes.Data.Data ?? [];
 
-        foreach (var nodeInfo in nodes ?? [])
+        foreach (var nodeInfo in nodes)
         {
-            var nodeInstance = await GetNodeAsync(nodeInfo);
+            var nodeInstance = new Node(this, nodeInfo.Node, []);
             var lxcs = await nodeInstance.GetLXCsAsync();
-            foreach (var lxc in lxcs ?? [])
+            foreach (var lxc in lxcs)
             {
                 lst.Add(new ItemInfo()
                 {
@@ -86,7 +86,7 @@ public class Instance
             }
 
             var vms = await nodeInstance.GetVMsAsync();
-            foreach (var vm in vms ?? [])
+            foreach (var vm in vms)
             {
                 lst.Add(new ItemInfo()
                 {
@@ -110,7 +110,7 @@ public class Instance
     {
         var r = await api.GetAsync<ResponseData<ResponseNames[]>>($"/api2/json/nodes/{nodeName}");
         r.EnsureSuccessStatusCode();
-        return new Node(this, nodeName, r.Data.Data);
+        return new Node(this, nodeName, r.Data.Data ?? []);
     }
 
 }
