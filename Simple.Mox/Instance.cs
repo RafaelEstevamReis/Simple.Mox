@@ -61,7 +61,7 @@ public class Instance
     }
     public async Task<ItemsInfo> GetItemsAsync()
     {
-        List<ItemInfo> lst = new List<ItemInfo>();
+        List<ItemInfo> lst = [];
         var rNodes = await api.GetAsync<ResponseData<InstanceNodes[]>>("/api2/json/nodes");
         rNodes.EnsureSuccessStatusCode();
         var nodes = rNodes.Data.Data ?? [];
