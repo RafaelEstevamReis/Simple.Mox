@@ -3,7 +3,6 @@
 using Simple.Mox.Sources;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 public record ItemsInfo
 {
@@ -11,7 +10,7 @@ public record ItemsInfo
     public ItemInfo this[string name] => Items.FirstOrDefault(o => o.Name == name) ?? throw new ArgumentException("ID not found");
     public ItemInfo this[InstanceItem item] => Items.FirstOrDefault(o => o.VMID == item.vmid) ?? throw new ArgumentException("ID not found");
 
-    public ItemInfo[] Items { get; set; } = System.Array.Empty<ItemInfo>();
+    public ItemInfo[] Items { get; set; } = [];
 }
 
 public record ItemInfoBase
@@ -25,22 +24,21 @@ public record ItemInfoBase
     public bool IsLXC => !IsVM;
     public bool IsRunning => Status == "running";
     public bool IsStopped => Status == "stopped";
+
+    public Node NodeInstance { get; set; } = null!;
+    public VM AsVM()
+    {
+        if (Type != "qemu") throw new InvalidOperationException("Is not a VM");
+        return NodeInstance.GetVM(VMID);
+    }
+    public LXC AsLXC()
+    {
+        if (Type == "qemu") throw new InvalidOperationException("Is not a LXC");
+        return NodeInstance.GetLXC(VMID);
+    }
 }
 public record ItemInfo : ItemInfoBase
 {
-    public InstanceNodes NodeInfo { get; set; }
-    public InstanceItem ItemDetails { get; set; }
-    public Node NodeInstance { get; set; }
-
-    public async Task<VM> AsVMAsync()
-    {
-        if (Type != "qemu") throw new InvalidOperationException("Is not a VM");
-        return await NodeInstance.GetVMAsync(VMID);
-    }
-    public async Task<LXC> AsLXCAsync()
-    {
-        if (Type == "qemu") throw new InvalidOperationException("Is not a LXC");
-        return await NodeInstance.GetLXCAsync(VMID);
-    }
-
+    public InstanceNodes NodeInfo { get; set; } = null!;
+    public InstanceItem ItemDetails { get; set; } = null!;
 }

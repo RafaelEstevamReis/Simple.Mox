@@ -2,7 +2,6 @@
 
 using Simple.Mox.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 public class LXC
@@ -10,13 +9,10 @@ public class LXC
     public Node Node { get; }
     public int VMID { get; }
 
-    private string[] items;
-
-    internal LXC(Node node, int vmid, ResponseFolders[] data)
+    internal LXC(Node node, int vmid)
     {
         Node = node;
         VMID = vmid;
-        items = data.Select(o => o.Subdir).ToArray();
     }
 
     private async Task<API.Response<T>> get<T>(string service)

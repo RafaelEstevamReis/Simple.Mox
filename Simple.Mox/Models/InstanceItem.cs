@@ -5,11 +5,10 @@ using System;
 public record InstanceItemBase
 {
     public int vmid { get; set; }
-    public string name { get; set; }
-    public string status { get; set; }
+    public string name { get; set; } = string.Empty;
+    public string status { get; set; } = string.Empty;
     public bool IsRunning => status == "running";
     public bool IsStopped => status == "stopped";
-
 }
 public record InstanceItem: InstanceItemBase
 {

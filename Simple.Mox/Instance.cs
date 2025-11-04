@@ -130,6 +130,7 @@ public class Instance
                     Type = "lxc",
                     Node = nodeInfo.Node,
                     IsVM = false,
+                    NodeInstance = nodeInstance,
                 });
             }
 
@@ -144,15 +145,15 @@ public class Instance
                     Type = "qemu",
                     Node = nodeInfo.Node,
                     IsVM = true,
+                    NodeInstance = nodeInstance,
                 });
             }
         }
         return lst.ToArray();
     }
 
-    [Obsolete("Use GetNode instead")]
-    public Task<Node> GetNodeAsync(InstanceNodes node) => Task.FromResult(new Node(this, node.Node));
     public Node GetNode(InstanceNodes node) => new(this, node.Node);
+    public Node GetNode(string node) => new(this, node);
 
     //public async Task<Node> GetNodeAsync(string nodeName)
     //{
