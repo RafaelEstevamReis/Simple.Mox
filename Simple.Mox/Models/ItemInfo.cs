@@ -14,20 +14,23 @@ public record ItemsInfo
     public ItemInfo[] Items { get; set; } = System.Array.Empty<ItemInfo>();
 }
 
-public record ItemInfo
+public record ItemInfoBase
 {
     public int VMID { get; set; }
     public string Node { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
-    public InstanceNodes NodeInfo { get; set; }
-    public InstanceItem ItemDetails { get; internal set; }
-    public Node NodeInstance { get; set; }
     public bool IsVM { get; set; }
     public bool IsLXC => !IsVM;
     public bool IsRunning => Status == "running";
     public bool IsStopped => Status == "stopped";
+}
+public record ItemInfo : ItemInfoBase
+{
+    public InstanceNodes NodeInfo { get; set; }
+    public InstanceItem ItemDetails { get; set; }
+    public Node NodeInstance { get; set; }
 
     public async Task<VM> AsVMAsync()
     {

@@ -105,6 +105,50 @@ public class Instance
         return new ItemsInfo { Items = lst.ToArray() };
     }
 
+    /// <summary>
+    /// Safer GetItemsAsync alternative, but queries less data
+    /// </summary>
+    public async Task<ItemInfoBase[]> GetItemsSummaryAsync()
+    {
+        List<ItemInfoBase> lst = [];
+        var rNodes = await api.GetAsync<ResponseData<InstanceNodesSummary[]>>("/api2/json/nodes");
+        rNodes.EnsureSuccessStatusCode();
+        var nodes = rNodes.Data.Data;
+
+        foreach (var nodeInfo in nodes ?? [])
+        {
+            var nodeInstance = new Node(this, nodeInfo.Node, []);
+            var lxcs = await nodeInstance.GetLXCsBaseAsync();
+            foreach (var lxc in lxcs ?? [])
+            {
+                lst.Add(new ItemInfoBase()
+                {
+                    VMID = lxc.vmid,
+                    Name = lxc.name,
+                    Status = lxc.status,
+                    Type = "lxc",
+                    Node = nodeInfo.Node,
+                    IsVM = false,
+                });
+            }
+
+            var vms = await nodeInstance.GetVMsBaseAsync();
+            foreach (var vm in vms ?? [])
+            {
+                lst.Add(new ItemInfoBase()
+                {
+                    VMID = vm.vmid,
+                    Name = vm.name,
+                    Status = vm.status,
+                    Type = "qemu",
+                    Node = nodeInfo.Node,
+                    IsVM = true,
+                });
+            }
+        }
+        return lst.ToArray();
+    }
+
     public async Task<Node> GetNodeAsync(InstanceNodes node) => await GetNodeAsync(node.Node);
     public async Task<Node> GetNodeAsync(string nodeName)
     {

@@ -109,6 +109,15 @@ public class Node
         r.EnsureSuccessStatusCode();
         return r.Data.Data ?? [];
     }
+    /// <summary>
+    /// Safer GetLXCsAsync alternative, but queries less data
+    /// </summary>
+    public async Task<InstanceItemBase[]> GetLXCsBaseAsync()
+    {
+        var r = await get<ResponseData<InstanceItemBase[]>>("lxc");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data ?? [];
+    }
 
     public async Task<LXC> GetLXCAsync(InstanceLXCs lxc) => await GetLXCAsync(lxc.vmid);
     public async Task<LXC> GetLXCAsync(int vmid)
@@ -121,6 +130,15 @@ public class Node
     public async Task<InstanceVMs[]> GetVMsAsync()
     {
         var r = await get<ResponseData<InstanceVMs[]>>("qemu");
+        r.EnsureSuccessStatusCode();
+        return r.Data.Data ?? [];
+    }
+    /// <summary>
+    /// Safer GetVMsAsync alternative, but queries less data
+    /// </summary>
+    public async Task<InstanceItemBase[]> GetVMsBaseAsync()
+    {
+        var r = await get<ResponseData<InstanceItemBase[]>>("qemu");
         r.EnsureSuccessStatusCode();
         return r.Data.Data ?? [];
     }

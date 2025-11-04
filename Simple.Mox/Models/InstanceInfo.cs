@@ -25,3 +25,16 @@ public record InstanceNodes
     public string Node { get; set; }
     public string Status { get; set; }
 }
+public record InstanceNodesSummary
+{
+    public string Id { get; set; }
+    public string Node { get; set; }
+    public string Status { get; set; }
+
+    public InstanceNodes AsNode() => new()
+    {
+        Id = Id,
+        Node = Node,
+        Status = Status,
+    };
+}
